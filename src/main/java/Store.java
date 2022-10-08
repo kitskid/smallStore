@@ -27,25 +27,38 @@ public class Store {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Авторизация");
         System.out.println("Введите логин или email:");
-        String login_email_user = scanner.nextLine();
-        //scanner.nextLine();
-        System.out.println("Введите пароль:");
-        String password_user = scanner.nextLine();
-        int k = 0;
-        for(User user: user_array_list) {
-            if (user.getLogin().equals(login_email_user) || user.getEmail().equals(login_email_user)) {
-                if(user.getPassword().equals(password_user)) {
-                    System.out.println("Вы успешно аутентифицировались");
-                    currentUser = user.getLogin();
-                    currentRoles = user.getRoles();
-                    currentId = user.getId();
-                    return true;
+        try {
+            String login_email_user = scanner.nextLine();
+            //scanner.nextLine();
+            System.out.println("Введите пароль:");
+            try {
+                String password_user = scanner.nextLine();
+                int k = 0;
+                for(User user: user_array_list) {
+                    if (user.getLogin().equals(login_email_user) || user.getEmail().equals(login_email_user)) {
+                        if(user.getPassword().equals(password_user)) {
+                            System.out.println("Вы успешно аутентифицировались");
+                            currentUser = user.getLogin();
+                            currentRoles = user.getRoles();
+                            currentId = user.getId();
+                            return true;
+                        }
+                    }
                 }
+
+            } catch (Exception e) {
+                System.out.println("ошибка ввода пароля");
+                authorization_and_registration();
+                exit(0);
             }
+        } catch (Exception e) {
+            System.out.println("ошибка ввода логина или email -а ");
+            authorization_and_registration();
+            exit(0);
         }
+
         System.out.println("вы ввели не верный логин/email или пароль");
         return false;
-
 
     }
 
@@ -54,37 +67,46 @@ public class Store {
 
         System.out.println("Регистрация");
         System.out.println("Введите логин. Он может содержать буквы и цифры, не меньше 1 и не больше 20 символов");
-        String login = scanner.nextLine();
-        if (!login.matches("^[а-яА-ЯёЁa-zA-Z0-9]{1,20}$")){
-            System.out.println("Вы ввели некорректный логин");
-            return false;
-        }
-        //scanner.nextLine();
-        System.out.println("Введите email:");
-        String email = scanner.nextLine();
-        if (!email.matches("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$")){
-            System.out.println("Вы ввели некорректный email");
-            return false;
-        }
-        //scanner.nextLine();
-        System.out.println("Введите номер телефона:");
-        String phoneNumber = scanner.nextLine();
-        if (!phoneNumber.matches("^((\\+7|7|8)+([0-9]){10})$")){
-            System.out.println("Вы ввели некорректный номер телефона");
-            return false;
-        }
-        System.out.println("Введите пароль. Он должен быть не менее 8 символов, должен содержать строчные и прописные латинские буквы, цифры, спецсимволы:");
-        String password = scanner.nextLine();
-        if (!password.matches("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")){
-            System.out.println("Вы ввели некорректный пароль");
-            return false;
-        }
+        try {
+            String login = scanner.nextLine();
+            if (!login.matches("^[а-яА-ЯёЁa-zA-Z0-9]{1,20}$")){
+                System.out.println("Вы ввели некорректный логин");
+                return false;
+            }
+            //scanner.nextLine();
+            System.out.println("Введите email:");
+            String email = scanner.nextLine();
+            if (!email.matches("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$")){
+                System.out.println("Вы ввели некорректный email");
+                return false;
+            }
+            //scanner.nextLine();
+            System.out.println("Введите номер телефона:");
+            String phoneNumber = scanner.nextLine();
+            if (!phoneNumber.matches("^((\\+7|7|8)+([0-9]){10})$")){
+                System.out.println("Вы ввели некорректный номер телефона");
+                return false;
+            }
+            System.out.println("Введите пароль. Он должен быть не менее 8 символов, должен содержать строчные и прописные латинские буквы, цифры, спецсимволы:");
+            String password = scanner.nextLine();
+            if (!password.matches("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$")){
+                System.out.println("Вы ввели некорректный пароль");
+                return false;
+            }
+            User new_user = new User(id, login, email, phoneNumber, password, Roles.CLIENT);
+            user_array_list.add(new_user);
+            id++;
+            System.out.println("Вы успешно зарегистрировались в системе");
+            return true;
 
-        User new_user = new User(id, login, email, phoneNumber, password, Roles.CLIENT);
-        user_array_list.add(new_user);
-        id++;
-        System.out.println("Вы успешно зарегистрировались в системе");
-        return true;
+        } catch (Exception e) {
+            System.out.println("ошибка ввода");
+            authorization_and_registration();
+            exit(0);
+        }
+        return false;
+
+
     }
 
     public void authorization_and_registration(){
@@ -127,6 +149,7 @@ public class Store {
         } catch (Exception e) {
             System.out.println("введите корректное наименование операции");
             authorization_and_registration();
+            exit(0);
         }
     }
     public void clientInterface(){
