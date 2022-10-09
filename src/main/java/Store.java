@@ -20,7 +20,7 @@ public class Store {
         productList.add(new Product(1, ProductCategory.TOYS, "doll", "toy doll", new BigDecimal("100")));
         productList.add(new Product(2, ProductCategory.COMPUTERS , "apple", "computer apple", new BigDecimal("10000")));
         productList.add(new Product(3, ProductCategory.FURNITURE, "table", "wooden table", new BigDecimal("500")));
-        productList.add(new ProductFactory().getProduct(4, ProductCategory.TOYS, "Mouse", "it is a doll mouse", new BigDecimal("500")));
+        productList.add(ProductFactory.getInstance().getProduct(4, ProductCategory.TOYS, "Mouse", "it is a doll mouse", new BigDecimal("500")));
     }
 
 
