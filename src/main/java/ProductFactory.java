@@ -19,4 +19,7 @@ public class ProductFactory {
         }
         return product;
     }
+    private ProductFactory() {
+
+    }
 }
