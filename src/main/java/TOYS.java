@@ -1,29 +1,39 @@
 import java.math.BigDecimal;
 
-public class Product implements ProductInterface{
+public class TOYS extends Product implements ProductInterface  {
 
     private ProductCategory productCategory;
     private String nameOfProduct;
     private String descriptionOfProduct;
     private BigDecimal price;
     private int id;
-    public Product() {}
 
-    public Product(int id, ProductCategory productCategory, String nameOfProduct, String descriptionOfProduct, BigDecimal price) {
+    public TOYS(int id, String nameOfProduct, String descriptionOfProduct, BigDecimal price) {
         this.id = id;
-        this.productCategory = productCategory;
+        this.productCategory = ProductCategory.TOYS;
         this.nameOfProduct = nameOfProduct;
         this.descriptionOfProduct = descriptionOfProduct;
         this.price = price;
     }
-    public void sale() {
-        System.out.println("продажа состоялась поздравляем!");
-    }
-    public void delivery() {
-        System.out.println("доставку возьмем на себя!");
-    }
-    public void returnProduct() {}
 
+    @Override
+    public void sale() {
+        System.out.println("Продажа TOYS");
+    }
+
+    @Override
+    public void delivery() {
+        System.out.println("Доставка TOYS");
+    }
+
+    @Override
+    public void returnProduct() {
+        System.out.println("Возврат TOYS");
+    }
+    @Override
+    public int getId() {
+        return id;
+    }
     public ProductCategory getProductCategory() {
         return productCategory;
     }
@@ -54,9 +64,5 @@ public class Product implements ProductInterface{
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public int getId() {
-        return id;
     }
 }

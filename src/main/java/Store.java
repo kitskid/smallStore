@@ -8,7 +8,7 @@ import static java.lang.System.exit;
 public class Store {
 
     private final List<User> user_array_list = new ArrayList<>();
-    private final List<Product> productList = new ArrayList<>();
+    private final List<ProductInterface> productList = new ArrayList<>();
     private static int id = 1;
     private static String currentUser;
     private static int currentId;
@@ -20,6 +20,7 @@ public class Store {
         productList.add(new Product(1, ProductCategory.TOYS, "doll", "toy doll", new BigDecimal("100")));
         productList.add(new Product(2, ProductCategory.COMPUTERS , "apple", "computer apple", new BigDecimal("10000")));
         productList.add(new Product(3, ProductCategory.FURNITURE, "table", "wooden table", new BigDecimal("500")));
+        productList.add(new ProductFactory().getProduct(4, ProductCategory.TOYS, "Mouse", "it is a doll mouse", new BigDecimal("500")));
     }
 
 
@@ -160,7 +161,7 @@ public class Store {
                 int operation = scanner.nextInt();
                 switch (operation) {
                     case 1:
-                        lookAtProduct();
+                        lookAtProduct(currentRoles);
                         break;
                     case 2:
                         authorization_and_registration();
@@ -222,7 +223,7 @@ public class Store {
 
                         break;
                     case 3:
-                        lookAtProduct();
+                        lookAtProduct(currentRoles);
                         break;
                     case 4:
                         addProduct();
@@ -270,19 +271,44 @@ public class Store {
             System.out.println("Клинта с таким id в системе не за регистрировано");
         }
     }
-    public void lookAtProduct() {
+    public void lookAtProduct(Roles roles) {
         System.out.println("Доступные товары магазина: ");
-        for (Product product: productList){
+        for (ProductInterface product: productList){
             System.out.println(product.getId() + " " + product.getProductCategory() + " " + product.getNameOfProduct() + " " + product.getDescriptionOfProduct() + " " + product.getPrice());
+        }
+        if (roles.equals(Roles.CLIENT)) {
+            System.out.println("для покупки выберите id товара, либо введите -1: ");
+            Scanner scanner = new Scanner(System.in);
+            try {
+                int id = scanner.nextInt();
+                if (id == -1) {
+                    clientInterface();
+                } else {
+                    ProductInterface currentProduct = null;
+                    for (ProductInterface product: productList) {
+                        if (id == product.getId()) {
+                          currentProduct = product;
+                        }
+                    }
+                    currentProduct.sale();
+                    currentProduct.delivery();
+                    productList.remove(currentProduct);
+                    lookAtProduct(currentRoles);
+                }
+
+            } catch (Exception e) {
+                System.out.println("ошибка ввода");
+                lookAtProduct(Roles.CLIENT);
+            }
         }
     }
     public void delProduct(){
-        Product delProduct = null;
+        ProductInterface delProduct = null;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите id товара: ");
         try {
             int id = scanner.nextInt();
-            for (Product product: productList) {
+            for (ProductInterface product: productList) {
                 if(product.getId() == id) {
                     delProduct = product;
                 }
